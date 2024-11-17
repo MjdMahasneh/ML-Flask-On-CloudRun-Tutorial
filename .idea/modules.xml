@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/model_deployment_tutorial.iml" filepath="$PROJECT_DIR$/.idea/model_deployment_tutorial.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Flask-On-CloudRun-tutorial.iml" filepath="$PROJECT_DIR$/.idea/Flask-On-CloudRun-tutorial.iml" />
     </modules>
   </component>
 </project>
