@@ -243,5 +243,106 @@ This prepares your application for deployment to Google Cloud Run by creating a 
 
 
 
+## Step 8: Deploy Your Docker Image to Google Cloud Run
+Now that your Docker image is in the Google Container Registry, you can deploy it to Google Cloud Run. This service will handle the infrastructure, allowing your application to automatically scale based on traffic.
+
+In your terminal or command prompt:
+
+
+```shell
+gcloud run deploy SERVICE_NAME --image gcr.io/PROJECT_ID/IMAGE_NAME --platform managed --allow-unauthenticated
+
+## e.g., gcloud run deploy my-first-project --image gcr.io/buoyant-program-442017-k3/my-first-project --platform managed --allow-unauthenticated
+```
+
+This command will start the deployment process, and it might ask you to specify the region if you haven't set a default region.
+
+#### Configuration Details
+
+- **`SERVICE_NAME`**: This is the name you assign to your service on Cloud Run. Choose a simple, descriptive name for your service, which will help you identify it within the Google Cloud Console. This name can be different from your Docker image name and should be relevant to your application.
+
+- **`--image gcr.io/PROJECT_ID/IMAGE_NAME`**: Replace `PROJECT_ID` with your Google Cloud project ID and `IMAGE_NAME` with the name of your Docker image stored in Google Container Registry. Ensure the image path correctly points to the image in Google Container Registry. This path includes your project's unique ID and the image name.
+
+- **`--platform managed`**: This option specifies that you are deploying to the fully managed environment of Cloud Run, which handles all infrastructure management tasks. This setting is crucial for specifying that Google should manage the underlying infrastructure, making deployment easier and more scalable.
+
+- **`--allow-unauthenticated`**: This flag allows public access to your application without requiring authentication. By default, Cloud Run services require authentication. This flag makes your application accessible to anyone on the internet.
+
+
+
+
+
+- **Verify Deployment**
+After running the deployment command, Google Cloud Run will output information about the deployment, including the URL where your application is hosted.
+
+Check the provided URL in your browser or use a tool like curl to make sure your application is running correctly.
+
+## Step 9: Monitor and Manage Your Deployment
+
+Once your application is deployed, you can manage and monitor it using the Google Cloud Console.
+
+- Navigate to Google Cloud Run in the Google Cloud Console.
+- Select your deployed service to view details, manage settings, see logs, and monitor usage.
+
+
+
+## Step 10: Test Your Deployed Application
+
+
+- **Obtain the Service URL**
+    After deploying your application to Google Cloud Run, you will receive a URL where your service is accessible. 
+    This URL is provided at the end of the deployment process and can also be found in the Google Cloud Console under the Cloud Run service details.
+
+- **Send Requests to the Application**
+    You can test your application by sending HTTP requests to the provided URL using tools like ```curl``` or [Postman](https://www.postman.com/downloads/). This allows you to verify that your application is correctly deployed and responding as expected.
+
+  - **Using curl**
+    You can use the curl command from your terminal to send a request to your application. Here’s an example based on the typical use case of a POST request expecting JSON data:
+    
+    ```shell
+    curl -X POST -H "Content-Type: application/json" -d '{"inputs": [[5.1, 3.5, 1.4, 0.2]]}' YOUR_SERVICE_URL/predict
+    ```
+    on Windows (open a new CMD window, no need to be in the same directory as the Flask app or Dockerfile):
+    ```shell
+    curl -X POST -H "Content-Type: application/json" -d "{\"inputs\": [[5.1, 3.5, 1.4, 0.2]]}" https://my-first-project-415802471809.europe-west2.run.app/predict
+    ```
+
+    Replace YOUR_SERVICE_URL with the URL provided after deployment. This command sends a sample JSON payload which should be adjusted according to what your application expects.
+
+     - ```X POST```: Specifies the HTTP method as POST.
+
+     - ```-H "Content-Type: application/json"```: Sets the header to indicate that the data being sent is in JSON format.
+     - ```-d '{"inputs": [[5.1, 3.5, 1.4, 0.2]]}'```: Defines the data being sent to the server. This JSON is structured according to how your Flask app expects input data. Make sure that the JSON structure aligns with what your Flask route ```/predict``` is programmed to parse.
+
+[//]: # (curl -X POST -H "Content-Type: application/json" -d "{\"inputs\": [[5.1, 3.5, 1.4, 0.2]]}" https://my-first-project-415802471809.europe-west2.run.app/predict)
+
+
+- **Review the Response**
+
+  Check the responses you receive:
+  - **Success**: A successful response will typically match what you expect your Flask application to return based on the input.
+  - **Error Handling**: If there are errors, the response should ideally contain error messages or codes that help identify the issue.
+
+- **Monitor Application Logs**
+
+    If the initial tests reveal issues or if you want to understand the application's behavior better under different conditions:
+
+  - Go to the Google Cloud Console.
+  - Navigate to the Cloud Run section.
+  - Select your application and go to the "Logs" tab to view detailed logs of incoming requests and system responses.
+
+- **Automated Testing**
+
+    If you anticipate frequent updates or want to ensure continuous reliability, consider setting up automated tests using tools like GitHub Actions, which can programmatically send requests to your application and verify the responses against expected outcomes.
+
+Testing your deployed application thoroughly will help ensure that it behaves as intended in a live environment, providing confidence in its reliability and functionality. If you encounter any specific issues during testing, you might need to adjust the application's code or configuration and redeploy.
+
+
+
+## Next Steps
+- **Optimize Configuration**: Depending on your application’s needs, consider setting environment variables, adjusting memory limits, or configuring custom domain mappings through the Google Cloud Console.
+- **Continuous Deployment**: Set up continuous deployment using Google Cloud Build or GitHub Actions to automatically deploy updates to your application whenever you push changes to your repository.
+- **Secure Your Application**: If needed, change the --allow-unauthenticated flag to restrict access, and use Identity-Aware Proxy or other authentication methods to control access.
+
+By following these steps, your Flask application will be running on a scalable, serverless platform, leveraging Google Cloud Run’s powerful features for easy deployment and management. 
 
 
