@@ -316,26 +316,42 @@ Once your application is deployed, you can manage and monitor it using the Googl
 [//]: # (curl -X POST -H "Content-Type: application/json" -d "{\"inputs\": [[5.1, 3.5, 1.4, 0.2]]}" https://my-first-project-415802471809.europe-west2.run.app/predict)
 
 
-- **Review the Response**
+- **Review the Response and Monitor Application Logs**
 
   Check the responses you receive:
   - **Success**: A successful response will typically match what you expect your Flask application to return based on the input.
-  - **Error Handling**: If there are errors, the response should ideally contain error messages or codes that help identify the issue.
+  - **Error Handling**: If there are errors, the response should ideally contain error messages or codes that help identify the issue. 
+        If the initial tests reveal issues or if you want to understand the application's behavior better under different conditions:
 
-- **Monitor Application Logs**
+      - Go to the **[Google Cloud Console](https://console.cloud.google.com/)** and navigate to the **Cloud Run** section.
+      - Click on your service (your SERVICE_NAME).
+      - Navigate to the Logs tab.
+      - Look for errors, such as _Issues starting the Flask app_ or _Memory limit of 512 MiB exceeded with 545 MiB used_. 
+      - Deubg and fix each error based on the log messages, e.g., by adjusting memory limits:
+        ```shell
+        gcloud run services update SERVICE_NAME --memory 1Gi
+        ```
+    - After making changes, redeploy your application to see if the issues are resolved, i.e., run the ```gcloud run deploy``` command.
 
-    If the initial tests reveal issues or if you want to understand the application's behavior better under different conditions:
 
-  - Go to the Google Cloud Console.
-  - Navigate to the Cloud Run section.
-  - Select your application and go to the "Logs" tab to view detailed logs of incoming requests and system responses.
+
+[//]: # (- **Monitor Application Logs**)
+
+[//]: # ()
+[//]: # (    If the initial tests reveal issues or if you want to understand the application's behavior better under different conditions:)
+
+[//]: # ()
+[//]: # (  - Go to the Google Cloud Console.)
+
+[//]: # (  - Navigate to the Cloud Run section.)
+
+[//]: # (  - Select your application and go to the "Logs" tab to view detailed logs of incoming requests and system responses.)
 
 - **Automated Testing**
 
     If you anticipate frequent updates or want to ensure continuous reliability, consider setting up automated tests using tools like GitHub Actions, which can programmatically send requests to your application and verify the responses against expected outcomes.
 
 Testing your deployed application thoroughly will help ensure that it behaves as intended in a live environment, providing confidence in its reliability and functionality. If you encounter any specific issues during testing, you might need to adjust the application's code or configuration and redeploy.
-
 
 
 ## Next Steps
